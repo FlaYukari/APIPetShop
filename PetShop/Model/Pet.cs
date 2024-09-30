@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace PetShop.Model
 {
+
     [Table("Pets")]
     public class Pet
     {
