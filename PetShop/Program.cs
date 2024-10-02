@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PetShop.Context;
+using PetShop.Repositories;
 using System;
 
 
@@ -14,12 +15,16 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
-
+//Adição do serviço de banco de dados:
 string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<APIPetShopDbContext>(options =>
                     options.UseMySql(mySqlConnection,
                     ServerVersion.AutoDetect(mySqlConnection)));
 
+//Adição das InterfacesRepositories e as Repositories:
+builder.Services.AddScoped<IPetRepository, PetRepository>();
+builder.Services.AddScoped<ITutorRepositoy, TutorRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 
