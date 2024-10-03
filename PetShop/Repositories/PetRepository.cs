@@ -14,5 +14,9 @@ namespace PetShop.Repositories
         {
             return GetAll().Where(c => c.TutorId == id);
         }
+        public bool PetExiste(int petId)
+        {
+            return _context.Pets.Any(t => t.PetId == petId);
+        }
     }
 }

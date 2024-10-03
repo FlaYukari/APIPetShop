@@ -17,7 +17,11 @@ namespace PetShop.Model
         public int TutorId { get; set; }
         [Required]
         public string Nome { get; set; }
-        public DateOnly DataNascimento { get; set; }
+
+        [DataType(DataType.Date)]
+        [Range(typeof(DateTime), "1900-01-01", "9999-12-31")]
+        public DateTime? DataNascimento { get; set; }
+
         [Required]
         public string Cpf { get; set; }
 

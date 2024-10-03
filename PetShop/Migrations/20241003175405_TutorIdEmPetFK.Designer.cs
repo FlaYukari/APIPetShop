@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetShop.Context;
 
@@ -11,9 +12,11 @@ using PetShop.Context;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(APIPetShopDbContext))]
-    partial class APIPetShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241003175405_TutorIdEmPetFK")]
+    partial class TutorIdEmPetFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

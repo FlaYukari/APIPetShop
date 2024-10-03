@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PetShop.Model;
 using PetShop.Repositories;
 
@@ -9,10 +10,12 @@ namespace PetShop.Controllers
     public class PetController : ControllerBase
     {
         private readonly IPetRepository _petRepository;
+        private readonly ITutorRepository _tutorRepository;
 
-        PetController(IPetRepository petRepository)
+        public PetController(IPetRepository petRepository, ITutorRepository tutorRepository)
         {
             _petRepository = petRepository;
+            _tutorRepository = tutorRepository;
         }
 
         [HttpGet]
@@ -36,6 +39,8 @@ namespace PetShop.Controllers
         {
             if (pet is null)
                 return BadRequest("Dados inválidos.");
+            if(pet.TutorId <=0 || !_tutorRepository.TutorExiste(pet.TutorId))
+                return BadRequest("Esse tutor não existe. Escolha um tutor cadastrado,");
             var petNovo = _petRepository.Create(pet);
             return Ok(petNovo);
         }
@@ -64,17 +69,15 @@ namespace PetShop.Controllers
             return Ok(petExcluido);
         }
 
-        [HttpGet("PetsPorTutor/{id}")]
-        public ActionResult<IEnumerable<Pet>> ObterPetsPorTutor(int id)
+        [HttpGet("PetsPorTutor/{tutorId}")]
+        public ActionResult<IEnumerable<Pet>> ObterPetsPorTutor(int tutorId)
         {
-            var pets = _petRepository.GetPetsPorTutor(id);
+            var tutorExiste = _tutorRepository.TutorExiste(tutorId);
+            if(!tutorExiste)
+                return NotFound("Este Tutor não existe. Por favor, cadstre o tutor desejado.");
+            var pets = _petRepository.GetPetsPorTutor(tutorId);
             if (pets == null)
-                return NotFound("");
-            else if (pets.Any())
-                //resposta 204:
-                //return NoContent();
-                //resposta 404:
-                return NotFound("Este Tutor não possui pets cadastrados.");
+                return NotFound("Este Tutor não tem pets cadastrados.");
             return Ok(pets);
         }
     }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetShop.Context;
 
@@ -11,9 +12,11 @@ using PetShop.Context;
 namespace PetShop.Migrations
 {
     [DbContext(typeof(APIPetShopDbContext))]
-    partial class APIPetShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241003123032_AlterarDataNascimentoTypePetTutor")]
+    partial class AlterarDataNascimentoTypePetTutor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +33,7 @@ namespace PetShop.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("PetId"));
 
-                    b.Property<DateTime?>("DataNascimento")
+                    b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Especie")
@@ -47,6 +50,10 @@ namespace PetShop.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
+
+                    b.Property<string>("Tutor")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("TutorId")
                         .HasColumnType("int");
@@ -70,7 +77,7 @@ namespace PetShop.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("DataNascimento")
+                    b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Endereco")
@@ -92,13 +99,11 @@ namespace PetShop.Migrations
 
             modelBuilder.Entity("PetShop.Model.Pet", b =>
                 {
-                    b.HasOne("PetShop.Model.Tutor", "Tutor")
+                    b.HasOne("PetShop.Model.Tutor", null)
                         .WithMany("Pets")
                         .HasForeignKey("TutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Tutor");
                 });
 
             modelBuilder.Entity("PetShop.Model.Tutor", b =>

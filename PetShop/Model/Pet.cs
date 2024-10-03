@@ -24,14 +24,14 @@ namespace PetShop.Model
 
         [DataType(DataType.Date)]
         [Range(typeof(DateTime), "1900-01-01", "9999-12-31")]
-        public DateTime DataNascimento { get; set; }
+        public DateTime? DataNascimento { get; set; }
 
         [Required]
         [ForeignKey("TutorId")]
         public int TutorId { get; set; }
 
         [JsonIgnore]
-        public string Tutor { get; set;}
+        public Tutor? Tutor { get; set;}
 
     }
 }
