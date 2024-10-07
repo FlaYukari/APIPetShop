@@ -33,7 +33,7 @@ namespace PetShop.Controllers
             return Ok(tutor);
         }
 
-        [HttpPost]
+        [HttpPost("{tutorId}")]
         public ActionResult<Tutor> Post(Tutor tutor)
         {
             if (tutor is null)
@@ -42,7 +42,7 @@ namespace PetShop.Controllers
             return Ok(tutorNovo);
         }
 
-        [HttpPut]
+        [HttpPut("{tutorId}")]
         public ActionResult<Tutor> Update(Tutor tutor)
         {
             if (tutor is null)
@@ -57,10 +57,14 @@ namespace PetShop.Controllers
             return Ok(tutorAtualizado);
         }
 
-        [HttpDelete]
-        public ActionResult Delete(Tutor tutor)
+        [HttpDelete("({tutodId})")]
+        public ActionResult Delete(int tutodId)
         {
-            if(tutor is null)
+            var tutorExiste = _tutorRepository.TutorExiste(tutodId);
+            if (!tutorExiste)
+                return NotFound("Esse tutor não existe.");
+            var tutor = _tutorRepository.Get(c => c.TutorId == tutodId);
+            if (tutor is null)
                 return NotFound();
             var tutorExcluido = _tutorRepository.Delete(tutor);
             return Ok(tutorExcluido);

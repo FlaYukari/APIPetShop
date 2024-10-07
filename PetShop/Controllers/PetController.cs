@@ -34,7 +34,7 @@ namespace PetShop.Controllers
             return Ok(pet);
         }
 
-        [HttpPost]
+        [HttpPost("{petId}")]
         public ActionResult<Pet> Post(Pet pet)
         {
             if (pet is null)
@@ -60,10 +60,14 @@ namespace PetShop.Controllers
             return Ok(petAtualizado);
         }
 
-        [HttpDelete]
-        public ActionResult Delete(Pet pet)
+        [HttpDelete("{petId}")]
+        public ActionResult Delete(int petId)
         {
-            if(pet is null)
+            var petExiste = _petRepository.PetExiste(petId);
+            if(!petExiste)
+                return NotFound("Esse pet não existe.");
+            var pet = _petRepository.Get(c => c.PetId==petId);
+            if (pet is null)
                 return NotFound();
             var petExcluido = _petRepository.Delete(pet);
             return Ok(petExcluido);
@@ -74,10 +78,11 @@ namespace PetShop.Controllers
         {
             var tutorExiste = _tutorRepository.TutorExiste(tutorId);
             if(!tutorExiste)
-                return NotFound("Este Tutor não existe. Por favor, cadstre o tutor desejado.");
+                return NotFound("Este Tutor não existe. Por favor, cadastre o tutor desejado.");
             var pets = _petRepository.GetPetsPorTutor(tutorId);
             if (pets == null)
                 return NotFound("Este Tutor não tem pets cadastrados.");
+
             return Ok(pets);
         }
     }
